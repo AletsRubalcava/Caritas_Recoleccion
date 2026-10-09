@@ -10,9 +10,33 @@
 		FB065FAD3073F6BA00A84399 /* Caritas_Recoleccion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Caritas_Recoleccion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FB8AB5E730793F7000ADE993 /* Exceptions for "Caritas_Recoleccion" folder in "Caritas_Recoleccion" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				RecolectoresMainView.swift,
+			);
+			target = FB065FAC3073F6BA00A84399 /* Caritas_Recoleccion */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		FB8AB5E830793F7000ADE993 /* Exceptions for "Caritas_Recoleccion" folder in "Copy Bundle Resources" phase from "Caritas_Recoleccion" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = FB065FAB3073F6BA00A84399 /* Resources */;
+			membershipExceptions = (
+				RecolectoresMainView.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FB065FAF3073F6BA00A84399 /* Caritas_Recoleccion */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FB8AB5E730793F7000ADE993 /* Exceptions for "Caritas_Recoleccion" folder in "Caritas_Recoleccion" target */,
+				FB8AB5E830793F7000ADE993 /* Exceptions for "Caritas_Recoleccion" folder in "Copy Bundle Resources" phase from "Caritas_Recoleccion" target */,
+			);
 			path = Caritas_Recoleccion;
 			sourceTree = "<group>";
 		};

@@ -11,7 +11,7 @@ import SwiftUI
 struct Caritas_RecoleccionApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Recoleccion()
         }
     }
 }
