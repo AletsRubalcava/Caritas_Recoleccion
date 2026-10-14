@@ -4,15 +4,15 @@ struct Recoleccion: View {
     @State private var showSheet = false
     @State private var colectionRegister = 1
     @State private var recoleccion : RecoleccionModel?
-    //@State private var recoleccion = RecoleccionModel(campana: "Campaña Hambre Cero", direccion: "Calle Falsa 123, Col. Centro", donante: "Oscar Ramirez Cruz", estado: "Completado", fecha: "Thu, 24 Sep 2026 00:00:00 GMT", frecuencia: "Trimestal GMT", idRecolecion: 1, metodoPago: "Efectivo", montoARecolectar: 2500, tags: ["Alimentación", "Asistencia Social"])
-    
+    @State private var Logout = false
+    @State public var id : Int
     
     var body: some View {
         ZStack {
             ColorConstants.background
                 ScrollView {
                     VStack {
-                        Header()
+                        Header(logout: $Logout)
                     VStack (spacing: 20){
                         
                         HStack {
@@ -190,7 +190,7 @@ struct Recoleccion: View {
             }
             .task {
                 do {
-                    recoleccion = try await RecoleccionService.getRecoleccion(id: 1)
+                    recoleccion = try await RecoleccionService.getRecoleccion(id: id)
                     print(recoleccion!)
                     
                     
@@ -202,5 +202,5 @@ struct Recoleccion: View {
 }
 
 #Preview {
-    Recoleccion()
+    Recoleccion(id: 1)
 }
