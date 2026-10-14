@@ -24,11 +24,11 @@ struct Reprogramar: View {
                             .multilineTextAlignment(.trailing)
                     }
                     PromesaBubble()
-                    AlertBubble(mensaje: "La recoleccion se marcarpa como NO RECOLECTADA", textColor: ColorConstants.highRisk, backColor: ColorConstants.lightHighRisk, icon: "multiply")
+                    AlertBubble(mensaje: "La recoleccion se marcara como NO RECOLECTADA", textColor: ColorConstants.highRisk, backColor: ColorConstants.lightHighRisk, icon: "multiply")
                     MotivoSelection(motivoSeleccionado: $recoleccion.motivoRepro)
                     CalendarPicker(nuevaFecha: .constant(Date()), fechaActual: Date())
-                    StatCardDetalle(title:"Fecha Seleccionada", subtitulo: "\(recoleccion.fecha)")
-                    Button("Reprogramar Recoleccion"){
+                    StatCardDetalle(title:"FECHA SELECCIONADA", subtitulo: "\(recoleccion.fecha)")
+                    Button("REPROGRAMAR RECOLECCION"){
                     } .font(.system(size: 22))
                     .frame(maxWidth: .infinity)
                     .buttonStyle(.borderedProminent)

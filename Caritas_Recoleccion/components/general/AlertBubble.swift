@@ -14,7 +14,7 @@ struct AlertBubble: View {
     let icon: String
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            Image(systemName: "multiply")
+            Image(systemName: icon)
                 .bold()
             Text(mensaje)
                 .font(.system(size: 18, weight: .bold))

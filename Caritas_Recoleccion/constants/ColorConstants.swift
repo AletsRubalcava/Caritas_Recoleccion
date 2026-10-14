@@ -11,6 +11,7 @@ struct ColorConstants {
     // Rick indicators
     static let lightHighRisk = Color(red: 124/255, green: 28/255, blue: 14/255, opacity: 0.1)
     static let highRisk = Color(red: 124/255, green: 28/255, blue: 14/255)
+    static let lightMidRisk = Color(red: 131/255, green: 98/255, blue: 0/255, opacity: 0.1)
     static let midRisk = Color(red: 131/255, green: 98/255, blue: 0/255)
     static let lightLowRisk = Color(red: 32/255, green: 73/255, blue: 10/255, opacity: 0.1)
     static let lowRisk = Color(red: 32/255, green: 73/255, blue: 10/255)
