@@ -1,9 +1,4 @@
-//
-//  RecoleccionesService.swift
-//  BOCETO_CARITAS
-//
-//  Created by Alumno on 21/09/26.
-//
+
 
 import Foundation
 
