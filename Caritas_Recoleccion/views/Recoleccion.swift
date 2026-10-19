@@ -1,18 +1,17 @@
 import SwiftUI
 
 struct Recoleccion: View {
-    @State private var showSheet = false
-    @State private var colectionRegister = 1
+    @State private var showSheetConfirm = false
+    @State private var colectionRegister = 2
     @State private var recoleccion : RecoleccionModel?
+    @State private var estados : [EstadoRecoleccionModel]?
     @State private var Logout = false
     @State public var id : Int
+    @Environment(\.openURL) private var openURL
     
     var body: some View {
         ZStack {
-            ColorConstants.background
                 ScrollView {
-                    VStack {
-                        Header(logout: $Logout)
                     VStack (spacing: 20){
                         
                         HStack {
@@ -33,7 +32,7 @@ struct Recoleccion: View {
                             HStack {
                                 TextBubble(title: recoleccion?.estado.uppercased() ?? "DESCONOCIDO")
                                 
-                                Text(recoleccion?.fecha ?? "SIN FECHA")
+                                Text((recoleccion?.fecha ?? "SIN FECHA").soloFecha)
                                     .font(.system(size: 12))
                                     .foregroundStyle(ColorConstants.lightGrayText)
                             }
@@ -67,22 +66,16 @@ struct Recoleccion: View {
                                     .font(.system(size: 16))
                                     .foregroundStyle(ColorConstants.darkGray)
                                 
-                                HStack(spacing: 15) {
-                                    Button("VER EN MAPAS") {
-                                        
+                                if (recoleccion != nil) {
+                                    HStack(spacing: 15) {
+                                        Button("VER EN MAPAS") {
+                                            abrirEnMapas(recoleccion!.direccion)
+                                        }
+                                        .buttonStyle(.bordered)
+                                        .tint(ColorConstants.mainColor)
+                                        .bold()
+                                        .frame(maxWidth: .infinity)
                                     }
-                                    .buttonStyle(.bordered)
-                                    .tint(ColorConstants.mainColor)
-                                    .bold()
-                                    .frame(maxWidth: .infinity)
-                                    
-                                    Button("LLAMAR") {
-                                        
-                                    }
-                                    .buttonStyle(.bordered)
-                                    .tint(ColorConstants.mainColor)
-                                    .bold()
-                                    .frame(maxWidth: .infinity)
                                 }
                             }
                             .padding(.horizontal, 22)
@@ -124,20 +117,21 @@ struct Recoleccion: View {
                                 Text("Selecciona el resultado de la visita al donante.").font(.system(size: 12)).foregroundStyle(ColorConstants.darkGray).padding(.bottom, 10)
                                 
                                 Picker(selection: $colectionRegister, label: Text("Registrar Colección")) {
-                                    Text("Completa").tag(1)
-                                    Text("Parcial").tag(2)
-                                    Text("No recolectada").tag(3)
-                                }.pickerStyle(.segmented)
-                                    .padding(.bottom, 10)
+                                    ForEach(estados ?? [], id: \.idEstado) { estado in
+                                        Text(estado.nombre).tag(estado.idEstado)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                                .padding(.bottom, 10)
                                 
                                 switch colectionRegister {
-                                case 1:
+                                case 2:
                                     TextBubble(title: "Se registrará el cobro total de $\(recoleccion?.montoARecolectar ?? 0) pesos y se marcará como COMPLETADA",
                                                icon: "checkmark",
                                                fontColor: ColorConstants.lowRisk, expanded: true).padding(.bottom, 10)
                                         .frame(height: 50)
                                     
-                                case 2:
+                                case 6:
                                     TextBubble(title: "La recolección se marcará como PARCIALMENTE RECOLECTADA.",
                                                icon: "circle.lefthalf.filled",
                                                fontColor: ColorConstants.midRisk, expanded: true).padding(.bottom, 10)
@@ -150,7 +144,7 @@ struct Recoleccion: View {
                                         .frame(height: 50)
                                     
                                 default:
-                                    TextBubble(title: "Se registrará el cobro total de $10,236 pesos.",
+                                    TextBubble(title: "Se registrará el cobro total de $\(recoleccion?.montoARecolectar ?? 0) pesos y se marcará como COMPLETADA",
                                                icon: "checkmark",
                                                fontColor: ColorConstants.lowRisk, expanded: true).padding(.bottom, 10)
                                         .frame(height: 50)
@@ -160,7 +154,7 @@ struct Recoleccion: View {
                                 HStack{
                                     Spacer()
                                     Button("Registrar Recolección") {
-                                        showSheet = true
+                                            showSheetConfirm = true
                                     }
                                     .buttonStyle(.borderedProminent)
                                     .tint(ColorConstants.mainColor)
@@ -174,30 +168,85 @@ struct Recoleccion: View {
                         }.padding(.bottom, 30)
                         
                     }.padding()
-                }
             }
-        }.ignoresSafeArea()
-            .sheet(isPresented: $showSheet) {
-                SheetRecoleccion(content: {
-                    VStack{
-                        InfoRow(icon: "calendar", text: "Fecha programada", value: recoleccion!.fecha)
-                        InfoRow(icon: "dollarsign.circle", text: "Forma de pago", value: recoleccion!.metodoPago)
-                        InfoRow(icon: "repeat", text: "Frecuencia", value: recoleccion!.frecuencia)
-                        Divider()
+        }.background(ColorConstants.background)
+            .sheet(isPresented: $showSheetConfirm, onDismiss: {
+                Task { await cargarRecoleccion() }
+            }) {
+                if let recoleccion {
+                    SheetRecoleccion(
+                        idRecoleccion: id,
+                        idEstado: colectionRegister,
+                        nombreDonante: recoleccion.donante
+                    ) {
+                        VStack {
+                            InfoRow(icon: "calendar", text: "Fecha programada", value: recoleccion.fecha)
+                            InfoRow(icon: "dollarsign.circle", text: "Forma de pago", value: recoleccion.metodoPago)
+                            InfoRow(icon: "repeat", text: "Frecuencia", value: recoleccion.frecuencia)
+                            Divider()
+                        }
                     }
+                    .presentationDetents([.medium])
                 }
-                ).presentationDetents([.medium])
             }
             .task {
                 do {
                     recoleccion = try await RecoleccionService.getRecoleccion(id: id)
                     print(recoleccion!)
                     
+                    estados = try await RecoleccionService.getEstadosRecoleccion()
+                    print(estados!)
                     
                 } catch {
                     print("Error obteniendo donante: \(error)")
                 }
             }
+    }
+    
+    private func abrirEnMapas(_ direccion: String) {
+        var components = URLComponents(string: "https://maps.apple.com/")!
+        components.queryItems = [URLQueryItem(name: "q", value: direccion)]
+        
+        if let url = components.url {
+            openURL(url)
+        }
+    }
+    
+    private func cargarRecoleccion() async {
+        do {
+            recoleccion = try await RecoleccionService.getRecoleccion(id: id)
+        } catch {
+            print("Error obteniendo recolección: \(error)")
+        }
+    }
+}
+
+extension String {
+    var soloFecha: String {
+        let formatosEntrada = [
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd",
+            "EEE, dd MMM yyyy HH:mm:ss zzz"
+        ]
+
+        let entrada = DateFormatter()
+        entrada.locale = Locale(identifier: "en_US_POSIX")
+        entrada.timeZone = TimeZone(secondsFromGMT: 0)
+
+        let salida = DateFormatter()
+        salida.locale = Locale(identifier: "es_MX")
+        salida.timeZone = TimeZone(secondsFromGMT: 0)
+        salida.dateFormat = "dd/MM/yyyy"
+
+        for formato in formatosEntrada {
+            entrada.dateFormat = formato
+            if let fecha = entrada.date(from: self) {
+                return salida.string(from: fecha)
+            }
+        }
+        return self
     }
 }
 

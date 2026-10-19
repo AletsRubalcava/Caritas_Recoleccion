@@ -2,6 +2,8 @@ import SwiftUI
 import Charts
 
 struct ContentView: View {
+    let idUsuario: Int
+    @Environment(\.dismiss) private var dismiss
     @State private var Logout = false
     @State private var Filtro = 1
     @State private var listaRecolecciones: Array<RecoleccionSiguiente> = [
@@ -27,7 +29,6 @@ struct ContentView: View {
     
 
     var body: some View {
-        NavigationStack {
         VStack {
             Header(logout: $Logout)
                 
@@ -146,7 +147,13 @@ struct ContentView: View {
                     }
                 }
             }.ignoresSafeArea()
-        }
+            .navigationBarBackButtonHidden(true)
+            .onChange(of: Logout) { _, newValue in // 👈 cerrar sesión
+                    if newValue {
+                        Logout = false
+                        dismiss()
+                    }
+                }
     }
     private func cargarLista() async {
             if Filtro == 1 {
@@ -198,5 +205,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    NavigationStack { ContentView(idUsuario: 1) }
 }
