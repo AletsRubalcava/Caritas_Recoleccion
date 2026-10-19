@@ -146,7 +146,7 @@ struct RecolectoresMainView: View {
                             .task {
                                 await cargarLista()
                             }
-                            .onChange(of: Filtro) { _ in
+                            .onChange(of: Filtro) { _ in	
                                 Task { await cargarLista() }
                             }
                         }.background(Color(.gray.opacity(0.05)))

@@ -2,7 +2,7 @@ import Foundation
 
 class RecoleccionService {
     
-    static let urlBase = "https://equipo4.tc2007b.tec.mx:10206"
+    static let urlBase = "https://equipo4.tc2007b.tec.mx:10207"
     
     static func getRecoleccion(id : Int) async throws -> RecoleccionModel{
         
