@@ -20,12 +20,6 @@ struct RecoleccionReproModel: Codable{
     }
 }
 
-struct EstadoRecoleccionModel: Codable, Identifiable{
-    var id: Int {idEstado}
-    let idEstado: Int
-    let nombre: String
-}
-
 struct ReprogramarRequestModel: Codable{
     let nuevaFecha: String
     let motivo: String

@@ -1,15 +1,8 @@
-//
-//  Reprogramar.swift
-//  Caritas_Recoleccion
-//
-//  Created by Alumno on 09/10/26.
-//
-
 import SwiftUI
 
 struct Reprogramar: View {
     @Environment(\.dismiss) private var dismiss
-    let idRecoleccion: Int = 1
+    let idRecoleccion : Int
     @State private var recoleccionRepro: RecoleccionReproModel?
     
     @State private var motivoSeleccionado: String = "No se encontraba"
@@ -65,7 +58,6 @@ struct Reprogramar: View {
                     .tint(ColorConstants.mainColor)
             } else if let recoleccion = recoleccionRepro {
                 ScrollView{
-                    Header()
                     VStack (spacing: 20){
                         HStack {
                             Spacer()
@@ -156,5 +148,5 @@ struct Reprogramar: View {
 }
 
 #Preview {
-    Reprogramar()
+    Reprogramar(idRecoleccion: 1)
 }

@@ -2,6 +2,8 @@ import SwiftUI
 
 struct Recoleccion: View {
     @State private var showSheetConfirm = false
+    @State private var irAReprogramar = false
+    @State private var irAParcial = false
     @State private var colectionRegister = 2
     @State private var recoleccion : RecoleccionModel?
     @State private var estados : [EstadoRecoleccionModel]?
@@ -154,11 +156,12 @@ struct Recoleccion: View {
                                 HStack{
                                     Spacer()
                                     Button("Registrar Recolección") {
-                                        if (colectionRegister == 2) {
-                                            showSheetConfirm = true
+                                        switch colectionRegister {
+                                        case 3:  irAReprogramar = true
+                                        case 6:  irAParcial = true
+                                        default: showSheetConfirm = true
                                         }
-                                    }
-                                    .buttonStyle(.borderedProminent)
+                                    }                                    .buttonStyle(.borderedProminent)
                                     .tint(ColorConstants.mainColor)
                                     .bold()
                                     Spacer()
@@ -201,6 +204,14 @@ struct Recoleccion: View {
                     
                 } catch {
                     print("Error obteniendo donante: \(error)")
+                }
+            }
+            .navigationDestination(isPresented: $irAReprogramar) {
+                Reprogramar(idRecoleccion: id)
+            }
+            .navigationDestination(isPresented: $irAParcial) {
+                if let recoleccion {
+                    PagoParcial(idRecoleccion: id)
                 }
             }
     }

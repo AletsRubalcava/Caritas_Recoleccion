@@ -1,16 +1,11 @@
-//
-//  PagoParcial.swift
-//  Caritas_Recoleccion
-//
-//  Created by Alumno on 12/10/26.
-//
-//
-//import SwiftUI
-//
-//struct PagoParcial: View {
+
+import SwiftUI
+
+struct PagoParcial: View {
 //    @State var montoRecibido: String = "0.0"
-//    
-//    var body: some View {
+    let idRecoleccion : Int
+//
+   var body: some View {
 //        ZStack{
 //            ColorConstants.background
 //            ScrollView{
@@ -41,9 +36,9 @@
 //            }
 //        }
 //        .ignoresSafeArea()
-//    }
-//}
+    }
+}
 //
-//#Preview {
-//    PagoParcial()
-//}
+#Preview {
+    PagoParcial(idRecoleccion: 1)
+}
