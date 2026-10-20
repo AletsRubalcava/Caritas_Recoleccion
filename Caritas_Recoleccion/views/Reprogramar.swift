@@ -64,6 +64,7 @@ struct Reprogramar: View {
                 ProgressView("Cargando detalles...")
                     .tint(ColorConstants.mainColor)
             } else if let recoleccion = recoleccionRepro {
+                let errorDeFecha = errorFecha(para: recoleccion)
                 ScrollView{
                     Header()
                     VStack (spacing: 20){
@@ -82,6 +83,13 @@ struct Reprogramar: View {
                         StatCardDetalle(
                             title:"FECHA SELECCIONADA",
                             subtitulo: dateFormatterDisplay.string(from: nuevaFechaSeleccionada))
+                        if let errorDeFecha {
+                            AlertBubble(
+                                mensaje: errorDeFecha,
+                                textColor: ColorConstants.highRisk,
+                                backColor: ColorConstants.lightHighRisk,
+                                icon: "exclamationmark.triangle")
+                        }
                         Button {
                             Task { await reprogramar() }
                         } label: {
@@ -96,6 +104,7 @@ struct Reprogramar: View {
                             .buttonStyle(.borderedProminent)
                             .tint(ColorConstants.mainColor)
                             .bold()
+                            .disabled(isSubmitting || errorDeFecha != nil)
                         
                     }
                     .padding(20)
