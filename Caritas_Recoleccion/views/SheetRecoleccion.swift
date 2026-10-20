@@ -1,8 +1,13 @@
 import SwiftUI
 
 struct SheetRecoleccion<Content: View>: View {
+    let idRecoleccion: Int
+    let idEstado: Int
+    let nombreDonante: String
     @ViewBuilder let content: Content
     @Environment(\.dismiss) private var dismiss
+    @State private var guardando = false
+    @State private var showError = false
 
     @State private var mostrarConfirmacion = false
 
@@ -22,7 +27,7 @@ struct SheetRecoleccion<Content: View>: View {
                         .font(.system(size: 22))
                         .bold()
 
-                    Text("MELANIE RIVERA")
+                    Text(nombreDonante.uppercased())
                         .font(.system(size: 12))
                         .foregroundStyle(ColorConstants.lightGrayText)
 
@@ -47,13 +52,21 @@ struct SheetRecoleccion<Content: View>: View {
                         .tint(ColorConstants.lightGray)
                         .foregroundStyle(.black)
                         .bold()
+                        .disabled(guardando)
 
-                        Button("ACEPTAR") {
-                            mostrarConfirmacion = true
+                        Button {
+                            Task { await confirmar() }
+                        } label: {
+                            if guardando {
+                                ProgressView()
+                            } else {
+                                Text("ACEPTAR")
+                            }
                         }
                         .buttonStyle(.borderedProminent)
                         .tint(ColorConstants.mainColor)
                         .bold()
+                        .disabled(guardando)
 
                         Spacer()
                     }
@@ -61,28 +74,41 @@ struct SheetRecoleccion<Content: View>: View {
                 .padding()
             }
             .navigationDestination(isPresented: $mostrarConfirmacion) {
-                ConfirmarRecoleccion {
+                ConfirmarRecoleccion(cerrarSheet: {
                     dismiss()
-                }
+                },
+                name: nombreDonante)
             }
+            .alert("No se pudo registrar la recolección. Intenta de nuevo.", isPresented: $showError) {
+                Button("OK") {}
+            }
+            .interactiveDismissDisabled(guardando)
+        }
+    }
+    
+    private func confirmar() async {
+        guardando = true
+        defer { guardando = false }
+
+        do {
+            try await RecoleccionService.completarRecoleccion(idRecoleccion: idRecoleccion)
+
+            
+            try await RecoleccionService.updateEstadoRecoleccion(
+                idRecoleccion: idRecoleccion,
+                idEstado: idEstado
+            )
+            mostrarConfirmacion = true
+        } catch {
+            print("Error actualizando estado o monto: \(error)")
+            showError = true
         }
     }
 }
 
 
 #Preview {
-    SheetRecoleccion(content: {
-        VStack{
-            HStack{
-                InfoField(title: "Monto Recibido", value: "$10,236")
-                InfoField(title: "Forma Pago", value: "Efectivo")
-            }
-            HStack{
-                InfoField(title: "Fecha", value: "05/0/26")
-                InfoField(title: "Status", value: "Completado")
-
-            }
-        }.frame(height: 200)
+    SheetRecoleccion(idRecoleccion: 1, idEstado: 2, nombreDonante: "Melanie Rivera") {
         
-    })
+    }
 }

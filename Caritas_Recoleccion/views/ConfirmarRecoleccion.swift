@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ConfirmarRecoleccion: View {
     let cerrarSheet: () -> Void
+    @State public var name : String
 
     var body: some View {
         ZStack {
@@ -18,14 +19,14 @@ struct ConfirmarRecoleccion: View {
                     .bold()
                     .padding(.bottom, 10)
 
-                Text("La promesa de Melanie Rivera se marcó como completada.")
+                Text("La promesa de \(name) se marcó como completada.")
                     .font(.system(size: 14))
                     .foregroundStyle(ColorConstants.lightGrayText)
                     .multilineTextAlignment(.center)
                     .bold()
                     .padding(.bottom, 20)
 
-                Button("Volver a solicitudes") {
+                Button("Aceptar") {
                     cerrarSheet()
                 }
                 .buttonStyle(.borderedProminent)
@@ -42,5 +43,5 @@ struct ConfirmarRecoleccion: View {
 
 
 #Preview {
-    ConfirmarRecoleccion(cerrarSheet: {})
+    ConfirmarRecoleccion(cerrarSheet: {}, name: "Melaine Rivera")
 }

@@ -7,7 +7,7 @@ struct RecoleccionModel : Codable{
     let estado : String
     let fecha : String
     let frecuencia : String
-    let idRecolecion : Int
+    let idRecoleccion : Int
     let metodoPago : String
     let montoARecolectar : Float
     let tags : [String]
