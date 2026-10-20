@@ -91,13 +91,16 @@ struct SheetRecoleccion<Content: View>: View {
         defer { guardando = false }
 
         do {
+            try await RecoleccionService.completarRecoleccion(idRecoleccion: idRecoleccion)
+
+            
             try await RecoleccionService.updateEstadoRecoleccion(
                 idRecoleccion: idRecoleccion,
                 idEstado: idEstado
             )
             mostrarConfirmacion = true
         } catch {
-            print("Error actualizando estado: \(error)")
+            print("Error actualizando estado o monto: \(error)")
             showError = true
         }
     }

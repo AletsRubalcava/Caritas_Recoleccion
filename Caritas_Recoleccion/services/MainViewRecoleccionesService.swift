@@ -10,7 +10,7 @@ import Foundation
 class RecoleccionesService {
     static func getListaRecoleccionesProx() async throws -> Array<RecoleccionSiguiente>{
         
-        guard let url = URL(string: "http://10.14.255.41:10206/recolecciones") else{
+        guard let url = URL(string: "http://equipo4.tc2007b.tec.mx:10207/recolecciones") else{
             print("URL incorrecto")
             throw URLError(.badURL)
         }
@@ -39,7 +39,7 @@ class RecoleccionesService {
     
     static func getListaRecoleccionesProxByMonto() async throws -> Array<RecoleccionSiguiente>{
         
-        guard let url = URL(string: "http://10.14.255.41:10206/recoleccionesMonto") else{
+        guard let url = URL(string: "http://equipo4.tc2007b.tec.mx:10207/recoleccionesMonto") else{
             print("URL incorrecto")
             throw URLError(.badURL)
         }
@@ -66,7 +66,7 @@ class RecoleccionesService {
     
     static func getListaRecPorDia() async throws -> Array<RecoleccionesSemanales>{
         
-        guard let url = URL(string: "http://10.14.255.41:10206/recPorDia") else{
+        guard let url = URL(string: "http://equipo4.tc2007b.tec.mx:10207/recPorDia") else{
             print("URL incorrecto")
             throw URLError(.badURL)
         }
@@ -93,7 +93,7 @@ class RecoleccionesService {
     
     static func getNumRecSemanal() async throws -> Int{
         
-        guard let url = URL(string: "http://10.14.255.41:10206/numRecolecciones") else{
+        guard let url = URL(string: "http://equipo4.tc2007b.tec.mx:10207/numRecolecciones") else{
             print("URL incorrecto")
             throw URLError(.badURL)
         }
@@ -119,7 +119,7 @@ class RecoleccionesService {
     
     static func getNumRecHoy() async throws -> Int{
         
-        guard let url = URL(string: "http://10.14.255.41:10206/numRecoleccionesHoy") else{
+        guard let url = URL(string: "http://equipo4.tc2007b.tec.mx:10207/numRecoleccionesHoy") else{
             print("URL incorrecto")
             throw URLError(.badURL)
         }
@@ -145,7 +145,7 @@ class RecoleccionesService {
     
     static func getMontoSumRec() async throws -> Int{
         
-        guard let url = URL(string: "http://10.14.255.41:10206/recoleccionesMontoSum") else{
+        guard let url = URL(string: "http://equipo4.tc2007b.tec.mx:10207/recoleccionesMontoSum") else{
             print("URL incorrecto")
             throw URLError(.badURL)
         }

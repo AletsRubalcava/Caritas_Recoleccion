@@ -17,12 +17,13 @@ struct RecoleccionRow: View {
                 Spacer()
                 VStack(alignment: .leading) {
                     Text("\(recoleccionSig.nombre) \(recoleccionSig.apellidoPaterno)")
-                        .font(.title)
+                        .font(.system(size: 24))
                         .bold()
                         .foregroundStyle(ColorConstants.mainColor)
-                    Text("Recoleccion en \(formatDate(recoleccionSig.fecha))")
-                        .font(.system(size: 20))
-                    
+                    Text("Recoleccion en ")
+                        .font(.system(size: 16))
+                    Text("\(timeUntil(recoleccionSig.fecha))")
+                        .font(.system(size: 16))
                 }
                 .padding(.trailing, 30)
                 VStack {
@@ -42,6 +43,6 @@ struct RecoleccionRow: View {
 }
 
 #Preview {
-    let recoleccionSigPrueba = RecoleccionSiguiente(apellidoPaterno: "Rivera", fecha: "12/09/2026", monto: 10236, nombre: "Melanie")
+    let recoleccionSigPrueba = RecoleccionSiguiente(idRecoleccion: 1, apellidoPaterno: "Rivera", fecha: "12/09/2026", monto: 10236, nombre: "Melanie")
     RecoleccionRow(recoleccionSig: recoleccionSigPrueba)
 }

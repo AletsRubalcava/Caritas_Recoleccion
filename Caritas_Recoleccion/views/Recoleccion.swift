@@ -101,7 +101,7 @@ struct Recoleccion: View {
                                                 fontColor: ColorConstants.mainColor
                                             )
                                         }                                }
-                                InfoRow(icon: "calendar", text: "Fecha programada", value: recoleccion?.fecha ?? "DESCONOCIDA")
+                                InfoRow(icon: "calendar", text: "Fecha programada", value: (recoleccion?.fecha ?? "SIN FECHA").soloFecha)
                                 InfoRow(icon: "dollarsign.circle", text: "Forma de pago", value: recoleccion?.metodoPago ?? "DESCONOCIDO")
                                 InfoRow(icon: "repeat", text: "Frecuencia", value: recoleccion?.frecuencia ?? "DESCONOCIDA")
                                 Divider()
@@ -154,7 +154,9 @@ struct Recoleccion: View {
                                 HStack{
                                     Spacer()
                                     Button("Registrar Recolección") {
+                                        if (colectionRegister == 2) {
                                             showSheetConfirm = true
+                                        }
                                     }
                                     .buttonStyle(.borderedProminent)
                                     .tint(ColorConstants.mainColor)
@@ -180,7 +182,7 @@ struct Recoleccion: View {
                         nombreDonante: recoleccion.donante
                     ) {
                         VStack {
-                            InfoRow(icon: "calendar", text: "Fecha programada", value: recoleccion.fecha)
+                            InfoRow(icon: "calendar", text: "Fecha programada", value: (recoleccion.fecha).soloFecha)
                             InfoRow(icon: "dollarsign.circle", text: "Forma de pago", value: recoleccion.metodoPago)
                             InfoRow(icon: "repeat", text: "Frecuencia", value: recoleccion.frecuencia)
                             Divider()

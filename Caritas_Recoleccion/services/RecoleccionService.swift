@@ -89,4 +89,47 @@ class RecoleccionService {
             throw URLError(.badServerResponse)
         }
     }
+    
+    enum RecoleccionError: LocalizedError {
+        case noEncontrada
+        case yaCompletada
+        case servidor(Int)
+
+        var errorDescription: String? {
+            switch self {
+            case .noEncontrada: return "La recolección no existe."
+            case .yaCompletada: return "Esta recolección ya estaba completada."
+            case .servidor(let codigo): return "Error del servidor (\(codigo)). Intenta de nuevo."
+            }
+        }
+    }
+
+    static func completarRecoleccion(idRecoleccion: Int) async throws {
+        guard let url = URL(string: "\(urlBase)/collection/complete") else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(CompletarRequest(idRecoleccion: idRecoleccion))
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let http = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+
+        switch http.statusCode {
+        case 200:
+            return
+        case 404:
+            throw RecoleccionError.noEncontrada
+        case 409:
+            throw RecoleccionError.yaCompletada
+        default:
+            print("Respuesta del API (\(http.statusCode)): \(String(data: data, encoding: .utf8) ?? "sin body")")
+            throw RecoleccionError.servidor(http.statusCode)
+        }
+    }
 }

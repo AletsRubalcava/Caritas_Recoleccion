@@ -7,9 +7,9 @@ struct ContentView: View {
     @State private var Logout = false
     @State private var Filtro = 1
     @State private var listaRecolecciones: Array<RecoleccionSiguiente> = [
-        RecoleccionSiguiente(apellidoPaterno: "Melanie", fecha: "30/09/2026", monto: 11236, nombre: "Rivera"),
-        RecoleccionSiguiente(apellidoPaterno: "Garza", fecha: "12/09/2026", monto: 10236, nombre: "Samuel"),
-        RecoleccionSiguiente(apellidoPaterno: "Vargas", fecha: "12/10/2026", monto: 13236, nombre: "Hector")
+        RecoleccionSiguiente(idRecoleccion: 1, apellidoPaterno: "Melanie", fecha: "30/09/2026", monto: 11236, nombre: "Rivera"),
+        RecoleccionSiguiente(idRecoleccion: 2, apellidoPaterno: "Garza", fecha: "12/09/2026", monto: 10236, nombre: "Samuel"),
+        RecoleccionSiguiente(idRecoleccion: 3, apellidoPaterno: "Vargas", fecha: "12/10/2026", monto: 13236, nombre: "Hector")
     ]
     
     @State private var listaRecSemanal = [
@@ -130,11 +130,11 @@ struct ContentView: View {
                             VStack(spacing: 0) {
                                 ForEach(listaRecolecciones) { recoleccionItem in
                                     NavigationLink {
-                                        Recoleccion(id: 1)
+                                        Recoleccion(id: recoleccionItem.id)
                                     }
                                     label: {
                                         RecoleccionRow(recoleccionSig: recoleccionItem)
-                                    }
+                                    }.buttonStyle(.plain)
                                 }
                             }
                             .task {
@@ -148,7 +148,7 @@ struct ContentView: View {
                 }
             }.ignoresSafeArea()
             .navigationBarBackButtonHidden(true)
-            .onChange(of: Logout) { _, newValue in // 👈 cerrar sesión
+            .onChange(of: Logout) { _, newValue in 
                     if newValue {
                         Logout = false
                         dismiss()

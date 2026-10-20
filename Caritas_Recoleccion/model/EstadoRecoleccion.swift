@@ -11,3 +11,7 @@ struct UpdateEstadoRequest: Codable {
     let idRecoleccion: Int
     let idEstado: Int
 }
+
+struct CompletarRequest: Codable {
+    let idRecoleccion: Int
+}

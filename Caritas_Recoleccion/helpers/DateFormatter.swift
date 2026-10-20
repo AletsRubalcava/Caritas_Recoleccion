@@ -48,3 +48,36 @@ func timeAgo(_ dateString: String) -> String {
 
     return "Hoy"
 }
+
+func timeUntil(_ dateString: String) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+
+    guard let date = formatter.date(from: dateString) else {
+        return dateString
+    }
+
+    let calendar = Calendar.current
+    let now = Date()
+
+    let components = calendar.dateComponents(
+        [.year, .month, .day],
+        from: now,
+        to: date
+    )
+
+    if let years = components.year, years > 0 {
+        return "\(years) \(years == 1 ? "año" : "años")"
+    }
+
+    if let months = components.month, months > 0 {
+        return "\(months) \(months == 1 ? "mes" : "meses")"
+    }
+
+    if let days = components.day, days > 0 {
+        return "\(days) \(days == 1 ? "día" : "días")"
+    }
+
+    return "Hoy"
+}
