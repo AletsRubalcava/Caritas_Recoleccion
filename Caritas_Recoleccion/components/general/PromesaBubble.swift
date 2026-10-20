@@ -16,14 +16,17 @@
 import SwiftUI
 
 struct PromesaBubble: View {
+    let nombre: String
+    let direccion: String
+    let monto: Double
     var body: some View {
         HStack{
             VStack(alignment:.leading){
-                Text("John Doe")
+                Text(nombre)
                     .foregroundStyle(ColorConstants.mainColor)
                     .font(.system(size: 20))
                     .bold()
-                Text("Avenida pato xxxx, centro")
+                Text(direccion)
                     .foregroundStyle(ColorConstants.lightGrayText)
                     .bold()
             }
@@ -31,7 +34,7 @@ struct PromesaBubble: View {
             VStack{
                 Text("PROMESA")
                     .foregroundStyle(ColorConstants.darkGray)
-                Text("$10,000")
+                Text("$\(String(monto))")
                     .foregroundStyle(ColorConstants.darkGray)
                     .bold()
                     .font(.system(size: 20))
@@ -45,5 +48,5 @@ struct PromesaBubble: View {
 }
 
 #Preview {
-    PromesaBubble()
+    PromesaBubble(nombre: "John Doe", direccion: "Avenida pato xxxx, centro", monto: 10000)
 }

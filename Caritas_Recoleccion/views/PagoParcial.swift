@@ -9,7 +9,7 @@
 //
 //struct PagoParcial: View {
 //    @State var montoRecibido: String = "0.0"
-//    @State private var recoleccion = RecoleccionModel2(campana: "Campaña Hambre Cero", direccion: "Calle Falsa 123, Col. Centro", donante: "Oscar Ramirez Cruz", estado: "Completado", fecha: Date(), frecuencia: "Trimestal GMT", idRecolecion: 1, metodoPago: "Efectivo", montoARecolectar: 2500, tags: ["Alimentación", "Asistencia Social"], motivoRepro: "No se encontraba")
+//    
 //    var body: some View {
 //        ZStack{
 //            ColorConstants.background
@@ -24,7 +24,7 @@
 //                            .bold()
 //                            .multilineTextAlignment(.trailing)
 //                    }
-//                    PromesaBubble()
+//                    PromesaBubble(nombre "Ahhh", direccion: "BBBB", monto: 10)
 //                    AlertBubble(mensaje: "La recoleccion se marcara como PARCIALMENTE RECOLECTADA", textColor: ColorConstants.midRisk, backColor: ColorConstants.lightMidRisk, icon: "circle.righthalf.filled")
 //                    TextBox(montoRecibido: $montoRecibido, montoTotal: Double(recoleccion.montoARecolectar))
 //                    CalendarPicker(nuevaFecha: .constant(Date()), fechaActual: Date())

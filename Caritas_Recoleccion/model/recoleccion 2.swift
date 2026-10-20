@@ -28,6 +28,5 @@ struct EstadoRecoleccionModel: Codable, Identifiable{
 
 struct ReprogramarRequestModel: Codable{
     let nuevaFecha: String
-    let motivo: Double
-    let idEstado: Int
+    let motivo: String
 }
