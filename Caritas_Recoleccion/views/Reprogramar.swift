@@ -98,13 +98,6 @@ struct Reprogramar: View {
                                 backColor: ColorConstants.lightHighRisk,
                                 icon: "exclamationmark.triangle")
                         }
-                        if let errorDeFecha {
-                            AlertBubble(
-                                mensaje: errorDeFecha,
-                                textColor: ColorConstants.highRisk,
-                                backColor: ColorConstants.lightHighRisk,
-                                icon: "exclamationmark.triangle")
-                        }
                         Button {
                             Task { await reprogramar() }
                         } label: {

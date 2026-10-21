@@ -46,7 +46,7 @@ func getRecoleccionDetalle(id: Int) async throws -> RecoleccionReproModel {
 }
 
 func getEstados(id: Int) async throws -> [EstadoRecoleccionModel] {
-    guard let url = URL(string:"\(urlBase)/recolecccion\(id)") else {
+    guard let url = URL(string:"\(urlBase)/estadosRecoleccion") else {
         throw URLError(.badURL)
     }
     
@@ -82,6 +82,38 @@ func ReprogramarRecoleccion(idRecoleccion: Int, peticion: ReprogramarRequestMode
     guard httpResponse.statusCode == 200 else {
         let body = String(data: data, encoding: .utf8) ?? ""
         print("Codigo de error del API \(httpResponse.statusCode) - \(body)")
+        throw URLError(.badServerResponse)
+    }
+    
+    let decoder = JSONDecoder()
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+    dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+    decoder.dateDecodingStrategy = .formatted(dateFormatter)
+    
+    return try decoder.decode(RecoleccionReproModel.self, from: data)
+}
+
+func registrarPagoParcial(idRecoleccion: Int, peticion: PagoParcialRequestModel) async throws -> RecoleccionReproModel {
+    guard let url = URL(string: "\(urlBase)/recoleccion/\(idRecoleccion)/pago_parcial") else {
+        throw URLError(.badURL)
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "PATCH"
+    request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.httpBody = try JSONEncoder().encode(peticion)
+    
+    let (data, response) = try await URLSession.shared.data(for: request)
+    
+    guard let httpResponse = response as? HTTPURLResponse else {
+        throw URLError(.badServerResponse)
+    }
+    
+    guard httpResponse.statusCode == 200 else {
+        let body = String(data: data, encoding: .utf8) ?? ""
+        print("Codigo de error del API \(httpResponse.statusCode): \(body)")
         throw URLError(.badServerResponse)
     }
     
