@@ -17,7 +17,10 @@ func getRecoleccionDetalle(id: Int) async throws -> RecoleccionReproModel {
         throw URLError(.badURL)
     }
     
-    let (data, response) = try await URLSession.shared.data(from: url)
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+    let (data,response) = try await URLSession.shared.data(for: request)
     
     guard let httpResponse = response as? HTTPURLResponse else {
         print("Respuesta no válida del servidor")
@@ -47,7 +50,10 @@ func getEstados(id: Int) async throws -> [EstadoRecoleccionModel] {
         throw URLError(.badURL)
     }
     
-    let (data, response) = try await URLSession.shared.data(from: url)
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+    let (data,response) = try await URLSession.shared.data(for: request)
     
     guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
         throw URLError(.badServerResponse)
@@ -63,8 +69,8 @@ func ReprogramarRecoleccion(idRecoleccion: Int, peticion: ReprogramarRequestMode
     
     var request = URLRequest(url: url)
     request.httpMethod = "PATCH"
+    request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    
     request.httpBody = try JSONEncoder().encode(peticion)
     
     let (data, response) = try await URLSession.shared.data(for: request)

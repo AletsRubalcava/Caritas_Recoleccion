@@ -11,6 +11,9 @@ struct Reprogramar: View {
     @State private var isLoading: Bool = true
     @State private var errorMessage: String? = nil
     
+    @State private var estados: [EstadoRecoleccionModel] = []
+    private let idEstadoCompletada = 2
+    
     @State private var isSubmitting: Bool = false
     @State private var mostrarExito: Bool = false
     @State private var errorEnvio: String? = nil
@@ -53,11 +56,14 @@ struct Reprogramar: View {
     var body: some View {
         ZStack{
             ColorConstants.background
+                .ignoresSafeArea()
             if isLoading {
                 ProgressView("Cargando detalles...")
                     .tint(ColorConstants.mainColor)
             } else if let recoleccion = recoleccionRepro {
                 let errorDeFecha = errorFecha(para: recoleccion)
+                let completada = recoleccion.idEstado == idEstadoCompletada
+                let nombreEstado = estados.first(where: { $0.idEstado == idEstadoCompletada })?.nombre ?? "Completada"
                 ScrollView{
                     VStack (spacing: 20){
                         HStack {
@@ -71,10 +77,27 @@ struct Reprogramar: View {
                         PromesaBubble(nombre: recoleccion.nombre, direccion: recoleccion.direccion, monto: recoleccion.monto)
                         AlertBubble(mensaje: "La recoleccion se marcara como NO RECOLECTADA", textColor: ColorConstants.highRisk, backColor: ColorConstants.lightHighRisk, icon: "multiply")
                         MotivoSelection(motivoSeleccionado: $motivoSeleccionado)
+                            .disabled(completada)
+                            .opacity(completada ? 0.5 : 1)
                         CalendarPicker(nuevaFecha: $nuevaFechaSeleccionada, fechaActual: recoleccion.fechaActual)
+                            .disabled(completada)
+                            .opacity(completada ? 0.5 : 1)
                         StatCardDetalle(
                             title:"FECHA SELECCIONADA",
                             subtitulo: dateFormatterDisplay.string(from: nuevaFechaSeleccionada))
+                        if completada {
+                            AlertBubble(
+                                mensaje: "Estado actual: \(nombreEstado). No se puede reprogramar una entrega que ya fue completada.",
+                                textColor: ColorConstants.highRisk,
+                                backColor: ColorConstants.lightHighRisk,
+                                icon: "exclamationmark.triangle")
+                        } else if let errorDeFecha {
+                            AlertBubble(
+                                mensaje: errorDeFecha,
+                                textColor: ColorConstants.highRisk,
+                                backColor: ColorConstants.lightHighRisk,
+                                icon: "exclamationmark.triangle")
+                        }
                         if let errorDeFecha {
                             AlertBubble(
                                 mensaje: errorDeFecha,
@@ -96,10 +119,11 @@ struct Reprogramar: View {
                             .buttonStyle(.borderedProminent)
                             .tint(ColorConstants.mainColor)
                             .bold()
-                            .disabled(isSubmitting || errorDeFecha != nil)
+                            .disabled(isSubmitting || completada || errorDeFecha != nil)
                         
                     }
                     .padding(20)
+                    
                 }
             } else if let error = errorMessage{
                 VStack(spacing:16){
@@ -107,7 +131,6 @@ struct Reprogramar: View {
                 }
             }
         }
-        .ignoresSafeArea()
         .task {
             do {
                 recoleccionRepro = try await getRecoleccionDetalle(id: idRecoleccion)

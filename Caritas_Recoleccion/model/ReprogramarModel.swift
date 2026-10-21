@@ -24,3 +24,8 @@ struct ReprogramarRequestModel: Codable{
     let nuevaFecha: String
     let motivo: String
 }
+
+struct PagoParcialRequestModel: Codable {
+    let montoRecibido: Double
+    let motivo: String
+}
