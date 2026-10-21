@@ -1,10 +1,17 @@
+//
+//  LoginService.swift
+//  BOCETO_CARITAS
+//
+//  Created by Alumno on 21/09/26.
+//
+
 import Foundation
 
-private let urlBase = "https://equipo4.tc2007b.tec.mx:10207/login"
+private let urlBase = "https://equipo4.tc2007b.tec.mx:10207/"
 
 func verificarLogin(_ newLogin: LoginRequest) async throws -> LoginResponse{
     
-  guard let url = URL(string: "\(urlBase)") else{
+  guard let url = URL(string: "\(urlBase)login") else{
       print("URL incorrecto")
       throw URLError(.badURL)
   }
@@ -27,13 +34,13 @@ func verificarLogin(_ newLogin: LoginRequest) async throws -> LoginResponse{
   }
     
     let verificado: LoginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
-    
-    if(verificado.error != nil) {
-        print("Error en el login: \(verificado.error)")
+
+    if let error = verificado.error {
+        print("Error en el login: \(error)")
+    } else if let token = verificado.token {
+        Sesion.shared.token = token.trimmingCharacters(in: .whitespacesAndNewlines)
+        print("Token guardado")
     }
-    
-    
-    
-  
-  return verificado
+
+    return verificado
 }

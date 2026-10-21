@@ -11,7 +11,11 @@ class RecoleccionService {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
@@ -30,13 +34,17 @@ class RecoleccionService {
     }
     
     static func getEstadosRecoleccion() async throws -> [EstadoRecoleccionModel] {
-        
+                
         guard let url = URL(string: "\(urlBase)/collection/states") else {
             print("URL incorrecto")
             throw URLError(.badURL)
         }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
+    
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
@@ -64,6 +72,7 @@ class RecoleccionService {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
         request.httpBody = try JSONEncoder().encode(
             UpdateEstadoRequest(idRecoleccion: idRecoleccion, idEstado: idEstado)
         )
@@ -112,6 +121,7 @@ class RecoleccionService {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
         request.httpBody = try JSONEncoder().encode(CompletarRequest(idRecoleccion: idRecoleccion))
 
         let (data, response) = try await URLSession.shared.data(for: request)

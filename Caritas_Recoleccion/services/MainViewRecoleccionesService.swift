@@ -15,7 +15,11 @@ class RecoleccionesService {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
@@ -44,7 +48,11 @@ class RecoleccionesService {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
@@ -71,7 +79,11 @@ class RecoleccionesService {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
@@ -98,7 +110,11 @@ class RecoleccionesService {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
@@ -124,7 +140,11 @@ class RecoleccionesService {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
@@ -150,7 +170,11 @@ class RecoleccionesService {
             throw URLError(.badURL)
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        //let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Sesion.shared.token ?? "", forHTTPHeaderField: "x-access-token")
+        let (data,response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             print("Respuesta no válida del servidor")
