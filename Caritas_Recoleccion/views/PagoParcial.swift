@@ -72,7 +72,6 @@ struct PagoParcial: View {
                 }
             }
         }
-        .ignoresSafeArea()
         .task {
             do {
                 recoleccion = try await getRecoleccionDetalle(id: idRecoleccion)
