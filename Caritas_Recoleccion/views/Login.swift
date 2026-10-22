@@ -3,40 +3,39 @@ import SwiftUI
 struct LoginView: View {
     @State private var username = ""
     @State private var password = ""
-    
+
     @State private var showAlert = false
     @State private var messageAlert = ""
     @State private var usuarioLogquado: LoginResponse? = nil
     @State private var estaLogueado: Bool = false
-    
+
+    private let colorPrincipal = Color(red: 0, green: 152/255, blue: 174/255)
+    private let colorCampo = Color(red: 191/255, green: 190/255, blue: 186/255)
+
     private func verificacionLogin() {
-        Task{
-            do{
-                if (username == "" || password == "") {
+        Task {
+            do {
+                if username == "" || password == "" {
                     showAlert.toggle()
                     messageAlert = "Favor de rellenar todos los campos"
-                    
                 } else {
-                    
                     let request = LoginRequest(userName: username, password_hash: password)
                     let response = try await verificarLogin(request)
-                    
-                    if(response.error != nil) {
+
+                    if response.error != nil {
                         showAlert.toggle()
                         messageAlert = "El correo o la contraseña son incorrectos"
                     } else {
                         usuarioLogquado = response
                         Sesion.shared.token = response.token
-                        if(response.idRol == 3) {
+                        if response.idRol == 3 {
                             estaLogueado = true
                         } else {
                             showAlert.toggle()
                             messageAlert = "No cuentas con los permisos necesarios"
                         }
-                    
                     }
                 }
-                    
             } catch {
                 print("\(error)")
                 showAlert.toggle()
@@ -44,149 +43,120 @@ struct LoginView: View {
             }
         }
     }
-    
-    var body: some View {
-        NavigationStack { // Navigation Stack
-            VStack { // VStack principal
-                HStack { // Barra de arriba
-                    
-                    Image("Caritas-Photoroom")
-                        .resizable(resizingMode: .stretch)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 125)
-                        .padding(.leading, 25)
-                    //.padding(.bottom, )
-                    
-                    Spacer()
-                    
-                } // Barra de arriba
-                .background( // Se pone el fondo de esta manera para solo aplicar la sombra a la figura
-                    Rectangle()
-                        .fill(Color.white)
-                        .shadow(color: .gray, radius: 10)
-                        .padding(.bottom,20)
+
+    private func campo<Content: View>(_ titulo: String, @ViewBuilder contenido: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(titulo)
+                .font(.system(size: 18, weight: .bold))
+            contenido()
+                .font(.system(size: 16))
+                .padding(.horizontal, 16)
+                .frame(height: 52)
+                .background(colorCampo)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(colorPrincipal, lineWidth: 3)
                 )
-                
-                .overlay {
-                    Rectangle()
-                        .stroke(.gray, lineWidth: 1)
-                        .padding(.bottom, 20)
+        }
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                HStack {
+                    Image("Caritas-Photoroom")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 70)
+                        .padding(.leading, 24)
+                        .padding(.vertical, 8)
+                    Spacer()
                 }
-                
-                // IMagen LOGO
-                Image("Logo Cara y Cruz")
-                    .resizable(resizingMode: .stretch)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 100)
-                
-                Text("CARA Y CRUZ")
-                    .font(.system(size: 40))
-                    .fontWeight(.heavy)
-                    .padding(.bottom, 40)
-                
-                
-                VStack { // VStack reucadro blanco
-                    
-                    VStack (alignment: .leading) { // VStack campus de captura
-                        Text("INICIAR SESIÓN")
-                            .font(.system(size: 24))
-                            .fontWeight(.bold)
-                        // .padding(.bottom, 35)
-                            .padding(.leading, 45)
-                        
-                        Divider()
-                            .padding(.bottom, 10)
-                        
-                        Text("USUARIO")
-                            .font(.system(size: 20))
-                            .fontWeight(.bold)
-                            .padding(.leading, 45)
-                        
-                        // Se hace el textField de manera manual para poder customizarlo
-                        TextField("caritas@gmailcom", text: $username)
-                            .textInputAutocapitalization(.never)
-                            .font(.system(size:16))
-                            .padding(20) // Pading interior
-                            .background(Color(red: 191/255, green: 190/255, blue: 186/255))
-                            .cornerRadius(12) // Redondear borde
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color(red:0, green: 152/255, blue: 174/255), lineWidth: 3) // Color del borde
-                            )
-                            .padding(.horizontal, 45)
-                            .padding(.bottom, 20)
-                        
-                        Text("CONTRASEÑA")
-                            .font(.system(size: 20))
-                            .fontWeight(.bold)
-                            .padding(.leading, 45)
-                        
-                        SecureField("•••••••", text: $password)
-                            .font(.system(size: 16))
-                            .padding(20) // Padin interior
-                            .background(Color(red: 191/255, green: 190/255, blue: 186/255))
-                            .cornerRadius(12) // Redondear borde
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color(red:0, green: 152/255, blue: 174/255), lineWidth: 3) // Color del borde
-                            )
-                            .padding(.horizontal, 45)
-                        
-                    } // VStack campus de captura
-                    
-                    Button{
-                        verificacionLogin()
-                        print(username)
-                    }
-                    label: {
-                        Text("INICIAR SESIÓN")
-                            .padding(.top, 15)
-                            .padding(.bottom, 15)
-                            .font(.system(size: 20))
-                            .fontWeight(.bold)
-                        
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.roundedRectangle(radius: 20))
-                    .frame(maxWidth: 300)
-                    .padding(.top, 55)
-                    .tint(Color(red:0, green: 152/255, blue: 174/255))
-                    .font(.system(size: 100))
-                    .alert("\(messageAlert)", isPresented: $showAlert){
-                        Button("OK"){}
-                    }
-                    
-                    
-                } // VStack reucadro blanco
-                .padding(.vertical, 20)
-                .background(.white.opacity(0.85))
-                .clipShape(RoundedRectangle(cornerRadius: 35))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 35)
-                        .stroke(.gray, lineWidth: 1)
+                .frame(maxWidth: .infinity)
+                .background {
+                    Color.white
+                        .shadow(color: .gray.opacity(0.6), radius: 8, y: 3)
+                        .ignoresSafeArea(edges: .top)
                 }
-                .shadow(color: .gray, radius: 10)
-                .padding(.horizontal, 60)
-                
-                
-                
-                Spacer()
-                
-            } // VStack principal
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background( // Degradado
+                .zIndex(1)
+
+                ScrollView {
+                    VStack(spacing: 0) {
+                        Image("Logo Cara y Cruz")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 100)
+                            .padding(.top, 36)
+
+                        Text("CARA Y CRUZ")
+                            .font(.system(size: 36, weight: .heavy))
+                            .padding(.top, 8)
+                            .padding(.bottom, 32)
+
+                        VStack(alignment: .leading, spacing: 18) {
+                            Text("INICIAR SESIÓN")
+                                .font(.system(size: 24, weight: .bold))
+
+                            Divider()
+
+                            campo("USUARIO") {
+                                TextField("caritas@gmail.com", text: $username)
+                                    .textInputAutocapitalization(.never)
+                                    .autocorrectionDisabled()
+                                    .keyboardType(.emailAddress)
+                            }
+
+                            campo("CONTRASEÑA") {
+                                SecureField("•••••••", text: $password)
+                            }
+
+                            Button {
+                                verificacionLogin()
+                            } label: {
+                                Text("INICIAR SESIÓN")
+                                    .font(.system(size: 20, weight: .bold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 14)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .buttonBorderShape(.roundedRectangle(radius: 20))
+                            .tint(colorPrincipal)
+                            .padding(.top, 12)
+                            .alert("\(messageAlert)", isPresented: $showAlert) {
+                                Button("OK") {}
+                            }
+                        }
+                        .padding(.horizontal, 28)
+                        .padding(.vertical, 28)
+                        .background(.white.opacity(0.85))
+                        .clipShape(RoundedRectangle(cornerRadius: 32))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 32)
+                                .stroke(.gray, lineWidth: 1)
+                        }
+                        .shadow(color: .gray.opacity(0.6), radius: 10)
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 32)
+                    }
+                    .frame(maxWidth: 500)
+                    .frame(maxWidth: .infinity)
+                }
+                .scrollBounceBehavior(.basedOnSize)
+                .scrollDismissesKeyboard(.interactively)
+            }
+            .background {
                 LinearGradient(
                     colors: [
                         Color(red: 195/255, green: 230/255, blue: 228/255),
-                        Color(red:0, green: 152/255, blue: 174/255)
+                        colorPrincipal
                     ],
                     startPoint: .top,
                     endPoint: .bottom
                 )
-            ) // Degradado
-            .ignoresSafeArea()
-            .navigationDestination(isPresented: $estaLogueado)
-            {
+                .ignoresSafeArea()
+            }
+            .navigationDestination(isPresented: $estaLogueado) {
                 ContentView(idUsuario: usuarioLogquado?.idUsuario ?? 0)
             }
             .onChange(of: estaLogueado) { _, nuevo in
@@ -196,7 +166,8 @@ struct LoginView: View {
                     usuarioLogquado = nil
                 }
             }
-        } // Navigation Stack
+        }
+        .preferredColorScheme(.light)
     }
 }
 

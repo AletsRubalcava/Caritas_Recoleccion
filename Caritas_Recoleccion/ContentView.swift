@@ -37,7 +37,7 @@ struct ContentView: View {
                         HStack {
                             Spacer()
                             Text("SOLICITUDES")
-                                .font(.system(size: 45))
+                                .font(.system(size: 40))
                                 .bold()
                                 .foregroundStyle(ColorConstants.mainColor)
                                 .padding()

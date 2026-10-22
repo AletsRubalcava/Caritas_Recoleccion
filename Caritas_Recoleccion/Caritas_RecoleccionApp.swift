@@ -4,7 +4,7 @@ import SwiftUI
 struct Caritas_RecoleccionApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            ContentView(idUsuario: 2)
         }
     }
 }
