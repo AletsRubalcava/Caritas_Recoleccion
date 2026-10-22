@@ -63,7 +63,7 @@ struct ContentView: View {
                             .cornerRadius(20)
                             
                             VStack(alignment: .leading) {
-                                Text("RECOLECCIONES EN PROCESO")
+                                Text("RECOLECCIONES PARA HOY")
                                     .bold()
                                     .padding(.top, 15)
                                     .padding(.leading, 15)
@@ -84,7 +84,7 @@ struct ContentView: View {
                         }
                         VStack {
                             VStack {
-                                Text("RECOLECCIÓN PROYECTADA")
+                                Text("RECOLECCIÓN DE LA SEMANA")
                                     .font(.system(size: 20))
                                     .bold()
                                     .foregroundStyle(ColorConstants.mainColor)

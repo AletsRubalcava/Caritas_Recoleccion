@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CalendarPicker: View {
     @Binding var nuevaFecha: Date
-    let fechaActual: Date
+    var fechaActual: Date
     var dateFormatter: DateFormatter{
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yyyy"

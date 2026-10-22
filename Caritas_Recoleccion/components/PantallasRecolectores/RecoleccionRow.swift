@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RecoleccionRow: View {
         
-    @State public var recoleccionSig: RecoleccionSiguiente
+    public var recoleccionSig: RecoleccionSiguiente
     
     var body: some View {
         VStack {
@@ -20,12 +20,13 @@ struct RecoleccionRow: View {
                         .font(.system(size: 24))
                         .bold()
                         .foregroundStyle(ColorConstants.mainColor)
-                    Text("Recoleccion en ")
+                    Text("Recoleccion ")
                         .font(.system(size: 16))
                     Text("\(timeUntil(recoleccionSig.fecha))")
                         .font(.system(size: 16))
                 }
                 .padding(.trailing, 30)
+                Spacer()
                 VStack {
                     Text("Donación")
                         .font(.system(size: 20))

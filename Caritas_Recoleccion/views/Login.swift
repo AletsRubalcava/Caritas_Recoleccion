@@ -89,7 +89,7 @@ struct LoginView: View {
                     
                     VStack (alignment: .leading) { // VStack campus de captura
                         Text("INICIAR SESIÓN")
-                            .font(.system(size: 28))
+                            .font(.system(size: 24))
                             .fontWeight(.bold)
                         // .padding(.bottom, 35)
                             .padding(.leading, 45)
@@ -158,7 +158,7 @@ struct LoginView: View {
                     
                     
                 } // VStack reucadro blanco
-                .padding(.vertical, 40)
+                .padding(.vertical, 20)
                 .background(.white.opacity(0.85))
                 .clipShape(RoundedRectangle(cornerRadius: 35))
                 .overlay {

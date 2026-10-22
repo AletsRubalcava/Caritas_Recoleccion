@@ -125,6 +125,7 @@ struct PagoParcial: View {
         .task {
             do {
                 recoleccion = try await getRecoleccionDetalle(id: idRecoleccion)
+                print(recoleccion)
                 isLoading = false
             } catch {
                 errorMessage = error.localizedDescription
